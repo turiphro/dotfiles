@@ -1,0 +1,10 @@
+# Global gitignore
+# (note: might also affect dotfiles repo)
+
+.cache
+.viminfo
+.vimundo/
+.bash_history
+
+__pycache__/
+*.pyc
