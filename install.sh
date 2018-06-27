@@ -4,8 +4,12 @@ DOTFILES=$(dirname $(realpath $BASH_SOURCE))
 
 # TODO function that checks if it exists (backup or ask)
 
-#ln -s $DOTFILES/.zshrc $HOME/.zshrc
+# update all submodules
+git submodule update --init --recursive
+git submodule update --recursive --remote
 
+
+# add symlinks to dotfiles in this repo
 for FILE in .zshrc .vimrc .tmux.conf .gitconfig; do
     ln -s $DOTFILES/$FILE $HOME/$FILE
 done
