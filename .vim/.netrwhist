@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/usr/local/lib/python2.7/dist-packages'
+let g:netrw_dirhist_2='/home/martijn/SparkleShare/doc/com/lang/Scala/progfun'
+let g:netrw_dirhist_3='/home/martijn/workdir/zazzy/frontend/.git'
+let g:netrw_dirhist_4='/home/martijn/src/backend/3d/storage/azure_php'
+let g:netrw_dirhist_5='/home/martijn/.oh-my-fish'
+let g:netrw_dirhist_6='/home/martijn/backend/3d/tests/inputs'
+let g:netrw_dirhist_7='/home/martijn/backend/scripts/servers/config_dev'
+let g:netrw_dirhist_8='/home/martijn'
+let g:netrw_dirhist_9='/home/martijn/backend/3d/blocks/svg'

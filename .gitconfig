@@ -1,0 +1,29 @@
+[user]
+	email = veenmart@amazon.com
+	name = Martijn van der Veen
+[color]
+	ui = auto
+[core]
+    editor = vim
+	pager = less -FMRiX
+[push]
+	default = simple
+[alias]
+	dag = log --graph --format='format:%C(yellow)%h%C(reset) %C(blue)\"%an\" <%ae>%C(reset) %C(magenta)%cr%C(reset)%C(auto)%d%C(reset)%n%s' --date-order
+    co = checkout
+    ci = commit
+    st = status
+    br = branch
+    cp = cherry-pick
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    type = cat-file -t
+    dump = cat-file -p
+# diff for staged changes (after git add, before git commit)
+    diff-c = diff --cached
+# show name and status of files changed
+    diff-ns = diff --name-status
+    log-ns = log --name-status
+    show-ns = show --name-status
+[amazon]
+	append-cr-url = true
+	pull-request-by-default = true
