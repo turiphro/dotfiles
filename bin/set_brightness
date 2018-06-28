@@ -1,0 +1,39 @@
+#! /bin/sh
+
+if [ `id -u` -ne 0 ]; then
+  echo "`basename $0` must be run as root"
+  exit
+fi
+
+case $1 in
+  0)
+    BRIGHTNESS=320
+    ;;
+  1)
+    BRIGHTNESS=445
+    ;;
+  2)
+    BRIGHTNESS=907
+    ;;
+  3)
+    BRIGHTNESS=1352
+    ;;
+  4)
+    BRIGHTNESS=2029
+    ;;
+  5)
+    BRIGHTNESS=2723
+    ;;
+  6)
+    BRIGHTNESS=3399
+    ;;
+  7)
+    BRIGHTNESS=4539
+    ;;
+  *)
+    echo "Usage: `basename $0` VALUE, int VALUE (0 .. 7)"
+          exit
+    ;;
+esac
+
+echo $BRIGHTNESS >/sys/class/backlight/intel_backlight/brightness

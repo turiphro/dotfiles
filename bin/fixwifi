@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo ifconfig wlp58s0 down
+sudo ifconfig wlp58s0 up
+sudo systemctl restart network-manager

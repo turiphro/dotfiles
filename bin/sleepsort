@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Sleep Sort: for each line (containing one integer I), sleep and print
+# Running time: max({I})
+
+parallel "sleep {} && echo {}"

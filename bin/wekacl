@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Weka command line interface
+# Author: Martijn van der Veen (based on examples in Data Science At The Command Line)
+#
+# Examples:
+# cat X.csv | wekacl clusterers.SimpleKMeans                    # adds cluster column
+# cat X.csv | wekacl filters.unsupervised.attribute.Normalize   # normalises each column
+
+function get_usable_classes() {
+    mkdir -p /tmp/weka_classes/
+
+    unzip -l $found_jar |
+    sed -rne 's/.*(weka)\/([^g])([^$]*)\.class$/\2\3/p' |
+    tr '/' '.' |
+    grep -v 'Exception' |
+    #parallel --timeout 1 -j4 -v "$WEKA_COMMAND weka.{} -h > /tmp/weka_classes/{} 2>&1"
+    cat
+}
+
+source /usr/lib/java-wrappers/java-wrappers.sh
+locate_jar weka.jar  # sets $found_jar
+
+if [ -z ${found_jar} ]; then
+    echo "weka not found! Did you forget to install it?"
+    exit 1
+fi
+
+if [ -z "$1" ]; then
+    echo "usage:" $(basename $0) "weka.class.name"
+    echo "or:   " $(basename $0) "list"
+    exit 1
+fi
+
+if [ "$1" == "list" ]; then
+    get_usable_classes
+    exit 0
+fi
+
+WEKA_CLASS="weka.$@"
+# Replace some commands with versions that DO take -i and -o
+if [[ $WEKA_CLASS == weka.clusterers.* ]]; then
+    WEKA_CLASS="weka.filters.unsupervised.attribute.AddCluster -W \"$WEKA_CLASS\""
+fi
+
+# If input is piped, save stdin (CSV format) as arff file
+extra_args=""
+if [ ! -t 0 ]; then
+    IN=$(mktemp --tmpdir weka-XXXXXXXX).arff
+    java -Xmx10224M -cp $found_jar weka.core.converters.CSVLoader /dev/stdin > $IN
+    extra_args="-i $IN"
+fi
+
+# Run Weka, and convert back to CSV
+OUT=$(mktemp --tmpdir weka-XXXXXXXX).arff
+COMMAND="java -Xmx10224M -cp $found_jar $WEKA_CLASS $extra_args -o $OUT"
+eval $COMMAND
+
+# If output was generated, pipe to stdout
+if [ -f $OUT ]; then
+    java -Xmx10224M -cp $found_jar weka.core.converters.CSVSaver -i $OUT
+fi
+
+rm -f $IN $OUT

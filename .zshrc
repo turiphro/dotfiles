@@ -51,7 +51,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 
 
 ## the Variables
-export PATH=$PATH:~/stack/doc/com/settings/bin/
+export PATH=$PATH:$DOTFILES/bin/
 export EDITOR='vim'
 
 
