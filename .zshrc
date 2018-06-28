@@ -1,8 +1,13 @@
 # ZSHRC
 # Author: Martijn van der Veen (turiphro)
 
+# Allow for a local zshrc file, *not* checked into git
+if [[ -a ~/.zshrc_local_pre ]]; then
+    source ~/.zshrc_local_pre
+fi
+
 # the Where
-export DOTFILES=$(dirname $(realpath ${(%):-%N})) # actual dir .zshrc lives in
+export DOTFILES=$(dirname $(readlink -e ${(%):-%N})) # actual dir .zshrc lives in
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="$HOME/.oh-my-zsh-custom" # outside .oh-my-fish so submodules in dotfiles work
 
@@ -48,6 +53,7 @@ source $ZSH/oh-my-zsh.sh
 ## the Plugin user configuration
 unalias rm cp mv  # undo from common-aliases
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
+bindkey \^U backward-kill-line
 
 
 ## the Variables
@@ -66,8 +72,6 @@ alias py=ipython3
 alias jqc='jq -C'        # colour-aware
 alias par='parallel'
 alias git-graph="git log --graph --all --oneline --decorate"
-
-eval $(thefuck --alias --enable-experimental-instant-mode)
 
 
 ## the Custom Functions
@@ -92,9 +96,9 @@ function hl() {
 # Data science
 function termplot() {
     WIDTH=$(tput cols)
-    HEIGHT=$(expr (tput lines) - 3)
-    if not contains -- "--stream" $@; then
-        set extra --exit
+    HEIGHT=$(expr $(tput lines) - 3)
+    if [[ $@ =~ "--stream" ]]; then
+        extra="--exit"
     fi
     feedgnuplot --terminal "dumb $WIDTH,$HEIGHT" $@ $extra
 }
@@ -124,7 +128,7 @@ function pdfbooklet() {
 
 # Allow for a local zshrc file, *not* checked into git
 if [[ -a ~/.zshrc_local ]]; then
-    #source ~/.zshrc_local # TODO
+    source ~/.zshrc_local
 fi
 
 
