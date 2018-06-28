@@ -14,7 +14,7 @@ for FILE in .zshrc .vimrc .tmux.conf .gitconfig .gitignore; do
     ln -s $DOTFILES/$FILE $HOME/$FILE
 done
 
-for DIR in .oh-my-zsh .vim; do
+for DIR in .vim .oh-my-zsh .oh-my-zsh-custom; do
     ln -s $DOTFILES/$DIR $HOME/
 done
 
