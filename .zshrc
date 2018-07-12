@@ -47,13 +47,25 @@ plugins=(
   zsh-syntax-highlighting   # highlight while typing (similar to Fish)
   zsh-autosuggestions       # auto suggestions based on history (ported from Fish)
 )
+for exclude in $plugins_exclude; do
+    plugins=(${plugins:#$exclude})
+done
 
 source $ZSH/oh-my-zsh.sh
 
 ## the Plugin user configuration
-unalias rm cp mv  # undo from common-aliases
+# Note: convention is $UPPER for strings and $lower for arrays -> $lower=(val val)
+unalias rm cp mv        # undo from common-aliases
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
+unsetopt share_history  # undo from history, reverting madness (branch off, merge/zip for new term)
+# Other options
+setopt correct          # auto-correct suggestions for command typos
+setopt noclobber        # don't overwrite existing files with > (use >! to force)
+
+
+## the Shortcuts (Bindings)
 bindkey \^U backward-kill-line
+bindkey "^'" quote-line
 
 
 ## the Variables
@@ -76,6 +88,13 @@ alias git-graph="git log --graph --all --oneline --decorate"
 
 ## the Custom Functions
 
+# Note: move lesser-used functions to $FPATH and load when needed
+# (loading in memory is more efficient than executing as script in bin/)
+FPATH=$DOTFILES/functions/:$FPATH
+autoload $(ls ${FPATH%%:*})
+
+# Note: aliases are resolved at definition time (should be defined before)
+
 function mkcd() {
     mkdir -p "$@" && cd "$@"
 }
@@ -87,6 +106,16 @@ function cdl() {
 function cdls() {
     cd "$@" && ls
 }
+
+function namedir () {
+    # allows [cd] ~$1 and used by zsh prompt and 'print -D'
+    _DIR=${2:-$PWD}
+    export $1=$_DIR
+    : ~$1
+}
+namedir doc ~/stack/doc/
+namedir com ~/stack/doc/com/
+namedir proj ~/stack/doc/projects/
 
 # highlight
 function hl() {
@@ -109,20 +138,6 @@ function termhist() {
 
 function termscat() {
     termplot --domain --points $@
-}
-
-
-function pdfbooklet() {
-    if test (echo $@ | grep "^http.*\.pdf"); then
-        echo "downloading url"
-        wget $@ -O pdf-original.pdf
-        LOCALFILE=pdf-original.pdf
-    else
-        LOCALFILE=$@
-    fi
-    pdfbook2 --paper=a4paper --short-edge --outer-margin=50 --inner-margin=10 --top-margin=10 --bottom-margin=10 $LOCALFILE
-    evince (echo $LOCALFILE | sed "s/.pdf/-book.pdf/")
-    echo "Please print landscape, short-edge, double-sided"
 }
 
 

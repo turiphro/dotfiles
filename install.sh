@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DOTFILES=$(dirname $(realpath $BASH_SOURCE))
+DOTFILES=$(dirname $(readlink -e ${BASH_SOURCE[0]})) # actual dir .zshrc lives in
 
 # TODO function that checks if it exists (backup or ask)
 
