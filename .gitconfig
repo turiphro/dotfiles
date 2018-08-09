@@ -28,3 +28,5 @@
 [amazon]
 	append-cr-url = true
 	pull-request-by-default = true
+[icdiff]
+	options = --no-bold #--line-numbers

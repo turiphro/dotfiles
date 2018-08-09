@@ -69,6 +69,7 @@ bindkey "^'" quote-line
 
 
 ## the Variables
+export PATH=$PATH:$HOME/bin/
 export PATH=$PATH:$DOTFILES/bin/
 export EDITOR='vim'
 
@@ -84,6 +85,8 @@ alias py=ipython3
 alias jqc='jq -C'        # colour-aware
 alias par='parallel'
 alias git-graph="git log --graph --all --oneline --decorate"
+alias gg="git-graph"
+alias gdc="git icdiff"   # column-wise diff (needs icdiff)
 
 
 ## the Custom Functions
@@ -120,6 +123,12 @@ namedir proj ~/stack/doc/projects/
 # highlight
 function hl() {
     grep "$@|" --color=always -E
+}
+
+# Internet
+function download_domain () {
+    # Download static (offline) version of full domain, following all links within domain
+    wget --recursive --no-clobber --page-requisites --html-extension --convert-links --domains $@ --no-parent $@
 }
 
 # Data science
