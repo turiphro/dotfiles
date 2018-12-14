@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 function pdfbooklet() {
-    if test (echo $@ | grep "^http.*\.pdf"); then
+    if test $(echo $@ | grep "^http.*\.pdf"); then
         echo "downloading url"
         wget $@ -O pdf-original.pdf
         LOCALFILE=pdf-original.pdf
@@ -9,6 +9,6 @@ function pdfbooklet() {
         LOCALFILE=$@
     fi
     pdfbook2 --paper=a4paper --short-edge --outer-margin=50 --inner-margin=10 --top-margin=10 --bottom-margin=10 $LOCALFILE
-    evince (echo $LOCALFILE | sed "s/.pdf/-book.pdf/")
     echo "Please print landscape, short-edge, double-sided"
+    evince $(echo $LOCALFILE | sed "s/.pdf/-book.pdf/")
 }

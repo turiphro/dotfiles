@@ -111,9 +111,9 @@ let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 3
 let g:neosnippet#disable_runtime_snippets={'_': 1}
 let g:SuperTabDefaultCompletionType = "<c-n>"  "scroll top to bottom
-nmap <F5> <Plug>(JavaComplete-Imports-Add)
-nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
+"nmap <F5> <Plug>(JavaComplete-Imports-Add)
+"nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
+"nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
 "more tips: https://github.com/artur-shaik/vim-javacomplete2
 filetype plugin indent on    " required
 set tags=./.tags;./tags;/,tags;/
@@ -123,10 +123,13 @@ let g:easytags_async = 1
 let g:easytags_auto_highlight = 0
 let g:easytags_include_members = 1
 let g:easytags_events = ['BufWritePost']
+
+let g:go_version_warning = 0
+
 autocmd FileType python setlocal completeopt-=preview
 "autocmd FileType python setlocal omnifunc=pythoncomplete#Complete  "needs +python
 autocmd FileType text,markdown nested NeoCompleteLock
-autocmd FileType java setlocal omnifunc=javacomplete#Complete
+"autocmd FileType java setlocal omnifunc=javacomplete#Complete
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
@@ -142,12 +145,22 @@ inoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<Up>"
 "without plugin/autoclose.vim, this breaks arrow keys in edit mode:
 ""inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+" Python
 let g:syntastic_python_python_exec='python3'
 let g:syntastic_python_checkers=['py3kwarn', 'flake8'] 
 "'compile', 'frosted', 'prospector', 'mypy', 'pyflakes', 'pylama', 'pylint']
 let g:syntastic_python_flake8_args="--ignore=E113,E22,E26,E401,E501,E702,F40,W3"
 "note: for debugging in Python, look at the Vdebug or vebugger or pyclewn plugins
 "(all need some work)
+" C++
+let g:syntastic_cpp_checkers=['clang_check', 'gcc']
+let g:syntastic_cpp_compiler='g++' " g++, clang
+let g:syntastic_cpp_compiler_options='-Wall -std=c++17'
+let g:syntastic_cpp_check_header=1
+let g:syntastic_cpp_config_file='.syntastic_cpp_config'
+
 let g:UltiSnipsExpandTrigger="<tab>"
 "warning codes:
 "http://pep8.readthedocs.org/en/latest/intro.html#error-codes
