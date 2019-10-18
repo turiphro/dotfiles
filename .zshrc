@@ -84,8 +84,12 @@ alias py2=ipython
 alias py=ipython3
 alias jqc='jq -C'        # colour-aware
 alias par='parallel'
-alias git-graph="git log --graph --all --oneline --decorate"
+#alias git-graph="git log --graph --all --oneline --decorate"
+GIT_LOG_FORMAT="'%C(yellow)%h%Creset %Cgreen(%cr)%C(auto)%d%Creset %s %C(bold blue)<%an>%Creset'"
+alias git-graph="git log --graph --all --pretty=format:$GIT_LOG_FORMAT"
+alias git-graph-local="git log --graph --all --pretty=format:$GIT_LOG_FORMAT \$(git branch | sed 's/*//g')"
 alias gg="git-graph"
+alias ggl="git-graph-local"
 alias gdc="git icdiff"   # column-wise diff (needs icdiff)
 
 
@@ -188,4 +192,10 @@ fi
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
+
+
+export PATH=$HOME/.toolbox/bin:$PATH
+
+export SPARK_HOME=/opt/spark
+export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 

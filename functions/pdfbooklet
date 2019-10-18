@@ -8,7 +8,7 @@ function pdfbooklet() {
     else
         LOCALFILE=$@
     fi
-    pdfbook2 --paper=a4paper --short-edge --outer-margin=50 --inner-margin=10 --top-margin=10 --bottom-margin=10 $LOCALFILE
+    pdfbook2 --paper=a4paper --short-edge --outer-margin=50 --inner-margin=10 --top-margin=10 --bottom-margin=10 "$LOCALFILE"
     echo "Please print landscape, short-edge, double-sided"
-    evince $(echo $LOCALFILE | sed "s/.pdf/-book.pdf/")
+    evince "$(echo $LOCALFILE | sed "s/.pdf/-book.pdf/")"
 }

@@ -15,6 +15,7 @@ set hlsearch
 set incsearch
 set smartcase
 "set foldmethod=syntax
+set foldlevelstart=1
 set wildmenu
 set wildmode=list:longest,full
 set ignorecase
@@ -115,6 +116,22 @@ let g:SuperTabDefaultCompletionType = "<c-n>"  "scroll top to bottom
 "nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
 "nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
 "more tips: https://github.com/artur-shaik/vim-javacomplete2
+
+" Rope
+"nnoremap <C-S-o> :RopeOrganizeImports<CR>0<CR><CR>
+"nnoremap <C-S-i> :RopeAutoImport<CR>
+"let ropevim_vim_completion = 1
+"let ropevim_extended_complete = 1
+"imap <c-space> <C-R>=RopeCodeAssistInsertMode()<CR>
+
+"Pymode
+let g:pymode_rope = 1
+let g:pymode_rope_autoimport = 1
+let g:pymode_rope_autoimport_import_after_complete = 1
+let g:pymode_rope_goto_definition_bind = '<C-c>b'
+let g:pymode_rope_goto_definition_cmd = 'tabe'
+let g:pymode_rope_autoimport_modules = ["os.*","traceback","django.*","lxml.etree","lxml.*","cv2.*","cv2"]
+
 filetype plugin indent on    " required
 set tags=./.tags;./tags;/,tags;/
 "save: 1=first tagfile seen in $tags or global, 2=first item in $tags
@@ -149,7 +166,7 @@ let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 " Python
 let g:syntastic_python_python_exec='python3'
-let g:syntastic_python_checkers=['py3kwarn', 'flake8'] 
+let g:syntastic_python_checkers=['py3kwarn', 'flake8', 'mypy'] 
 "'compile', 'frosted', 'prospector', 'mypy', 'pyflakes', 'pylama', 'pylint']
 let g:syntastic_python_flake8_args="--ignore=E113,E22,E26,E401,E501,E702,F40,W3"
 "note: for debugging in Python, look at the Vdebug or vebugger or pyclewn plugins
