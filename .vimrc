@@ -104,6 +104,7 @@ let g:airline_powerline_fonts = 1
 "NERDTreeToggle doesn't highlight current file; needs conditional
 map <expr> <C-n> g:NERDTree.IsOpen() ? ":NERDTreeClose<CR>" : ":NERDTreeFind<CR>"
 nnoremap <C-u> :UndotreeToggle<cr>
+let g:rooter_manual_only = 1  "stop vim-rooter changing directory to root automatically
 
 " Autocomplete
 let g:acp_enableAtStartup = 0

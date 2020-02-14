@@ -1,0 +1,5 @@
+#!/bin/bash
+
+MODE="DPY-3: nvidia-auto-select @2560x1080 +0+0 {ViewPortIn=2560x1080, ViewPortOut=1920x1080+0+0}"
+
+nvidia-settings --assign CurrentMetaMode="$MODE"

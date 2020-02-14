@@ -1,0 +1,18 @@
+DEVICE=eDP-1
+DIR=/sys/class/backlight/intel_backlight/
+
+#read -r max < $DIR/max_brightness
+#read -r curr < $DIR/actual_brightness
+#new_brightness=$(bc -l <<< "scale = 2; $curr / $max + 0.2")
+#echo $max $curr $new_brightness
+
+new_brightness=$1
+
+if [ 1 -eq "$(echo "$new_brightness > 1.0" | bc)" ]; then
+  new_brightness=1
+fi
+if [ 1 -eq "$(echo "$new_brightness < 0.1" | bc)" ]; then
+  new_brightness=0.1
+fi
+
+xrandr --output $DEVICE --brightness $new_brightness

@@ -1,0 +1,10 @@
+[Unit]
+Description=Local system resume actions
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl restart network-manager.service
+
+[Install]
+WantedBy=suspend.target

@@ -194,8 +194,13 @@ fi
 # export LANG=en_US.UTF-8
 
 
-export PATH=$HOME/.toolbox/bin:$PATH
-
 export SPARK_HOME=/opt/spark
 export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+
+# AWS cli auto-completion
+if [ -f /usr/share/zsh/vendor-completions/_awscli ]; then
+    source /usr/share/zsh/vendor-completions/_awscli
+else
+    source aws_zsh_completer.sh
+fi
 
