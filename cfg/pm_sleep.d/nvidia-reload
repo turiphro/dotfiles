@@ -1,0 +1,8 @@
+#! /bin/sh
+# Workaround for not working nvidia cuda after suspend
+case $1 in
+    resume|thaw)
+	rmmod nvidia_uvm
+	modprobe nvidia_uvm
+    ;;
+esac

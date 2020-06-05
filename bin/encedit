@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# Change an encrypted file.
+#
+# This will decrypt the file to a temporary file, open $EDITOR, and save the file again
+# at the original location
+
+FILE=$1
+ALGORITHM=${2:-aes256}
+
+echo "Changing encrypted file $FILE (algorithm: $ALGORITHM)"
+set -e
+
+TMP_FILE=$(mktemp)
+
+echo -n "$ Password: "
+read -s _PASSWORD
+_PASSWORD=$_PASSWORD openssl enc -d -$ALGORITHM -in $FILE -out $TMP_FILE -pass env:_PASSWORD
+$EDITOR $TMP_FILE
+
+_PASSWORD=$_PASSWORD openssl enc -$ALGORITHM -in $TMP_FILE -out $FILE -pass env:_PASSWORD
+unset _PASSWORD # just to be sure
+rm $TMP_FILE
+
+echo "Saved to $FILE!"

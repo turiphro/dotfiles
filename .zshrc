@@ -71,6 +71,7 @@ bindkey "^'" quote-line
 ## the Variables
 export PATH=$PATH:$HOME/bin/
 export PATH=$PATH:$DOTFILES/bin/
+export PATH=$PATH:/usr/local/cuda-10.1/bin
 export EDITOR='vim'
 
 

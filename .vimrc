@@ -92,7 +92,9 @@ execute pathogen#infect()
 set background=dark "automatic light/dark when starting
 " Toggle theme
 nmap \b :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+"let g:solarized_termcolors = 256  # changes team to fallback to 256 colours
 colorscheme solarized "solarized, primary (google), ..
+
 
 " Status bar
 set laststatus=2

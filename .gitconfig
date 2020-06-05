@@ -25,6 +25,7 @@
     diff-ns = diff --name-status
     log-ns = log --name-status
     show-ns = show --name-status
+	permission-reset = !git diff -p -R --no-ext-diff --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
 [amazon]
 	append-cr-url = true
 	pull-request-by-default = true
