@@ -72,6 +72,8 @@ bindkey "^'" quote-line
 export PATH=$PATH:$HOME/bin/
 export PATH=$PATH:$DOTFILES/bin/
 export PATH=$PATH:/usr/local/cuda-10.1/bin
+export PATH=$PATH:$(echo $HOME/software/*/bin | tr ' ' ':')
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64
 export EDITOR='vim'
 
 
@@ -92,6 +94,7 @@ alias git-graph-local="git log --graph --all --pretty=format:$GIT_LOG_FORMAT \$(
 alias gg="git-graph"
 alias ggl="git-graph-local"
 alias gdc="git icdiff"   # column-wise diff (needs icdiff)
+alias lsres="ffmpeg -f video4linux2 -list_formats all -i"  # list webcam resolutions (add /dev/videoX)
 
 
 ## the Custom Functions
@@ -195,13 +198,10 @@ fi
 # export LANG=en_US.UTF-8
 
 
-export SPARK_HOME=/opt/spark
-export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
-
 # AWS cli auto-completion
 if [ -f /usr/share/zsh/vendor-completions/_awscli ]; then
     source /usr/share/zsh/vendor-completions/_awscli
-else
+elif [ -f aws_zsh_completer.sh ]; then
     source aws_zsh_completer.sh
 fi
 
