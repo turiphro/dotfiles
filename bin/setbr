@@ -1,4 +1,4 @@
-DEVICE=eDP-1
+DEVICE=eDP-1-1
 DIR=/sys/class/backlight/intel_backlight/
 
 #read -r max < $DIR/max_brightness

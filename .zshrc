@@ -86,6 +86,7 @@ alias o=xdg-open
 alias py2=ipython
 alias py=ipython3
 alias jqc='jq -C'        # colour-aware
+alias -g J="| jq . -C | less"
 alias par='parallel'
 #alias git-graph="git log --graph --all --oneline --decorate"
 GIT_LOG_FORMAT="'%C(yellow)%h%Creset %Cgreen(%cr)%C(auto)%d%Creset %s %C(bold blue)<%an>%Creset'"
@@ -93,7 +94,7 @@ alias git-graph="git log --graph --all --pretty=format:$GIT_LOG_FORMAT"
 alias git-graph-local="git log --graph --all --pretty=format:$GIT_LOG_FORMAT \$(git branch | sed 's/*//g')"
 alias gg="git-graph"
 alias ggl="git-graph-local"
-alias gdc="git icdiff"   # column-wise diff (needs icdiff)
+alias gdi="git icdiff"   # column-wise diff (needs icdiff)
 alias lsres="ffmpeg -f video4linux2 -list_formats all -i"  # list webcam resolutions (add /dev/videoX)
 
 
