@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -z $1 ]; then
+    echo "Usage: $0 branch-to-release"
+    exit
+fi;
+
+feature_branch=$1
+main_branch=${2:-mainline}
+
+echo "[--] pulling latest changes"
+git checkout $main_branch
+git pull --rebase
+
+echo "[--] trying fast-forward merge"
+if SUCCESS=$(git merge --squash --ff-only $feature_branch); then
+    git add .
+    git commit
+    echo "[OK] successfully merged fast-forward: $SUCCESS"
+else
+    echo "[--] trying rebase and merge"
+    git rebase $main_branch $feature_branch
+    git checkout $main_branch
+    git merge --squash $feature_branch
+    git add .
+    git commit
+    echo "[OK] successfully merged after rebase"
+fi
+
+echo "[>>] you may now push your changes"
