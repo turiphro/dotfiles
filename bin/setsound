@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Switch sound output
+
+SOUND_OUTPUT_SPEAKERS="alsa_output.usb-XMOS_HIFI_DSD-00.iec958-stereo"
+SOUND_OUTPUT_HEADPHONES="alsa_output.usb-Lotoo_PAW-S1_v1.00-00.iec958-stereo"
+
+SOUND_OUTPUT=$1
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 OUTPUT_SOURCE"
+    echo
+    echo "Available output sources (use ID or name):"
+    pactl list sinks short
+    exit 1
+fi
+
+# switch default output
+pactl set-default-sink $SOUND_OUTPUT
+
+# switch current streams to new output
+CURRENT_STREAMS=($(pacmd list-sink-inputs | grep index | awk '{print $2}'))
+for i in ${CURRENT_STREAMS[*]}; do
+    pacmd move-sink-input $i $SOUND_OUTPUT &> /dev/null
+done
+
