@@ -5,7 +5,7 @@ DOTFILES=$(dirname $(readlink -e ${BASH_SOURCE[0]})) # actual dir .zshrc lives i
 # TODO function that checks if it exists (backup or ask)
 
 # update all submodules
-git submodule update --init --recursive # checkout all repos as-is
+git submodule update --init --recursive --progress # checkout all repos as-is
 #git submodule update --remote # update top-level only (no --recursive)
 
 
