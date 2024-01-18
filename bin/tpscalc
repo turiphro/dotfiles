@@ -1,0 +1,157 @@
+#!/usr/bin/env python3
+
+# Calculate the necessary TPS or running time or total count
+# There are 3 variables:
+# - total count
+# - TPS (transactions per second)
+# - running time (accepts/creates simple notation like 123s, 28h, or 321d)
+# Users need to provide 2 and will get the 3rd
+#
+# Professionally hacked together by Martijn van der Veen, 2024-01 (v1)
+
+
+import math
+import re
+import tkinter as tk
+
+from collections import OrderedDict
+
+
+METRIC_UNITS = OrderedDict([
+    ("k", 1e3),
+    ("M", 1e6),
+    ("B", 1e9),
+])
+
+
+TIME_UNITS = OrderedDict([
+    ("s", 1),     # seconds
+    ("m", 60),
+    ("h", 60*60),
+    ("d", 60*60*24),
+    ("w", 60*60*24*7),
+    ("M", int(60*60*24*30.4)),
+    ("y", 60*60*24*365),
+])
+
+
+class TPSCalcGUI():
+    def __init__(self):
+        self.event_lock = False
+
+        self.root = tk.Tk()
+        self.root.title("TPS calculator")
+        
+        # variables
+        self.tps = tk.StringVar()
+        self.total = tk.StringVar()
+        self.time = tk.StringVar()
+
+        # input boxes
+        tps_input = tk.Entry(self.root, width=30)
+        total_input = tk.Entry(self.root, width=30)
+        time_input = tk.Entry(self.root, width=30)
+
+        tps_input["textvariable"] = self.tps
+        total_input["textvariable"] = self.total
+        time_input["textvariable"] = self.time
+
+        # labels
+        label0 = tk.Label(self.root, text="Fill in 2 out of 3")
+        tps_label = tk.Label(self.root, text="TPS:")
+        total_label = tk.Label(self.root, text="Total count:")
+        time_label = tk.Label(self.root, text="Total time:")
+
+        # x-buttons (and events)
+        tps_clear = tk.Button(self.root, text="x", command=lambda: self.clear_text(tps_input, tps_clear))
+        total_clear = tk.Button(self.root, text="x", command=lambda: self.clear_text(total_input, total_clear))
+        time_clear = tk.Button(self.root, text="x", command=lambda: self.clear_text(time_input, time_clear))
+
+        label0.grid(row=0, column=1, padx=10, pady=10, sticky="s")
+        tps_label.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        tps_input.grid(row=1, column=1, padx=10, pady=10)
+        tps_clear.grid(row=1, column=2, padx=(0, 10))
+        total_label.grid(row=2, column=0, padx=10, pady=10, sticky="e")
+        total_input.grid(row=2, column=1, padx=10, pady=10)
+        total_clear.grid(row=2, column=2, padx=(0, 10))
+        time_label.grid(row=3, column=0, padx=10, pady=10, sticky="e")
+        time_input.grid(row=3, column=1, padx=10, pady=10)
+        time_clear.grid(row=3, column=2, padx=(0, 10))
+
+        # events
+        self.tps.trace_add("write", self.on_entry_change)
+        self.total.trace_add("write", self.on_entry_change)
+        self.time.trace_add("write", self.on_entry_change)
+
+        self.root.mainloop()
+
+
+    def on_entry_change(self, *args):
+        if self.event_lock:
+            # Ignoring events during event handling (since updating the UI values causes events)
+            print("IGNORING event", args)
+            return
+
+        self.event_lock = True
+        try:
+            print("event", args)
+            tps = self.parse(self.tps.get(), METRIC_UNITS)
+            total = self.parse(self.total.get(), METRIC_UNITS)
+            time = self.parse(self.time.get(), TIME_UNITS)
+            print(f"given: tps={tps}, total={total}, time={time}")
+
+            if tps and total and args[0] != "PY_VAR2":
+                time = total / tps
+                self.time.set(self.format(time, TIME_UNITS))
+            elif tps and time and args[0] != "PY_VAR1":
+                total = tps * time
+                self.total.set(self.format(total, METRIC_UNITS))
+            elif total and time and args[0] != "PY_VAR0":
+                tps = total / time
+                print('setting tps to', self.format(tps, METRIC_UNITS))
+                self.tps.set(self.format(tps, METRIC_UNITS))
+
+            print(f"result: tps={tps}, total={total}, time={time}")
+        except Exception as ex:
+            print(f"ERROR: {ex}")
+            pass
+
+        self.event_lock = False
+
+    def clear_text(self, entry, button):
+        entry.delete(0, tk.END)
+
+    def parse(self, s: str, multipliers: dict) -> str:
+        """Parse a numeric string that may include metric units like M for Million"""
+        if not s:
+            return None
+
+        # only parse if there's just one unit
+        keys = "".join(multipliers.keys())
+        pattern = re.compile(fr"(\d+(?:\.\d+)?)\s*([{keys}]*)")
+        match = pattern.match(s)
+        print(match)
+        print(match.groups())
+        if match:
+            value, unit = match.groups()
+            return int(float(value) * multipliers.get(unit, 1))
+        else:
+            raise ValueError(f"Invalid format: {s}")
+
+
+    def format(self, s: str, multipliers: dict) -> str:
+        """Format back to an easy to read string which uses the multipliers"""
+        s = float(s)
+        for unit, multiplier in reversed(multipliers.items()):
+            if s >= multiplier:
+                value = s / multiplier
+                s %= multiplier
+                # only show most significant digit
+                return f"{value:.1f}{unit}"
+
+        return f"{s:.1f}"
+
+
+if __name__ == "__main__":
+    gui = TPSCalcGUI()
+
