@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # ZSHRC
 # Author: Martijn van der Veen (turiphro)
 
@@ -6,22 +13,36 @@ if [[ -a ~/.zshrc_local_pre ]]; then
     source ~/.zshrc_local_pre
 fi
 
-# the Where
-export DOTFILES=$(dirname $(readlink -e ${(%):-%N})) # actual dir .zshrc lives in
+
+# =========================================================
+# 0. OS DETECTION
+# =========================================================
+case "$OSTYPE" in
+  darwin*) OS="mac" ;;
+  linux*)  OS="linux" ;;
+  *)       OS="unknown" ;;
+esac
+
+# =========================================================
+# 1. DOTFILES + OH-MY-ZSH SETUP
+# =========================================================
+export DOTFILES="$(cd "$(dirname "$(readlink ~/.zshrc)")" && pwd -P)"
 export ZSH="$HOME/.oh-my-zsh"
-export ZSH_CUSTOM="$HOME/.oh-my-zsh-custom" # outside .oh-my-fish so submodules in dotfiles work
+export ZSH_CUSTOM="$DOTFILES/.oh-my-zsh-custom" # outside .oh-my-fish so submodules in dotfiles work
 
 function zsh_add_plugin () {
     echo "git submodule add -f \"$1\" .oh-my-zsh-custom/plugins/(basename $)"
-    _BASE=${$(basename $1)%.*}
-    cd $DOTFILES && git submodule add -f "$1" .oh-my-zsh-custom/plugins/$_BASE && cd -
+    #_BASE=${$(basename $1)%.*}
+	local base="${1:t:r}"
+    cd $DOTFILES && git submodule add -f "$1" .oh-my-zsh-custom/plugins/$base && cd -
 }
 
 ## the Visual
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"  # robbyrussell, bira, fishy
+#ZSH_THEME="agnoster"
+ZSH_THEME="powerlevel10k/powerlevel10k" ## robbyrussell, bira, fishy, agnoster=legacy
 
 DEFAULT_USER='martijn' # hide user from prompt when logged in locally
 
@@ -102,8 +123,8 @@ alias lsres="ffmpeg -f video4linux2 -list_formats all -i"  # list webcam resolut
 
 # Note: move lesser-used functions to $FPATH and load when needed
 # (loading in memory is more efficient than executing as script in bin/)
-FPATH=$DOTFILES/functions/:$FPATH
-autoload $(ls ${FPATH%%:*})
+fpath=("$DOTFILES/functions" $fpath)
+autoload -Uz ${fpath[1]}/*(.N:t)
 
 # Note: aliases are resolved at definition time (should be defined before)
 
@@ -206,3 +227,5 @@ elif [ -f aws_zsh_completer.sh ]; then
     source aws_zsh_completer.sh
 fi
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
