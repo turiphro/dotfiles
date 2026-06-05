@@ -91,3 +91,6 @@
 [submodule ".vim/bundle/python-mode"]
 	path = .vim/bundle/python-mode
 	url = https://github.com/python-mode/python-mode
+[submodule ".oh-my-zsh-custom/themes/powerlevel10k"]
+	path = .oh-my-zsh-custom/themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git
